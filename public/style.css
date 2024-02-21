@@ -1,0 +1,17 @@
+body {
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #0c0c0c;
+}
+
+h1 span {
+  color: #ffe80a;
+}
+kbd {
+  background-color: #171d25;
+  color: #f0f1f3;
+}

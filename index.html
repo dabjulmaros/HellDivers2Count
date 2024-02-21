@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Helldiver2 Count</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+    <link rel="stylesheet" href="public/style.css" />
+    <link rel="icon" type="image/x-icon" href="/public/skull.png" />
+  </head>
+  <body>
+    <h1>
+      <p><abbr title="Steam Only">Current</abbr> <span>HELLDIVERS</span></p>
+      <kbd hx-get="/divers/" hx-trigger="load, every 5m">Loading</kbd>
+    </h1>
+  </body>
+</html>
