@@ -92,16 +92,18 @@ func main() {
 		p := message.NewPrinter(language.English)
 
 		
-		rStr := p.Sprintf("%d In-Game", count)
+		rStr := p.Sprintf("<kbd>%d In-Game</kbd><small><sub>Last Update: %s</sub></small>", count, oldTime.Format("03:04:05PM"));
 
 		if count > 450000{
-			rStr = p.Sprintf("%d In-Game<div><img src='public/shock.png'/></div>", count)
+			rStr += "<img src='public/shock.png'/></div>"; 
 		}
 
 		tmpl, _ := template.New("t").Parse(rStr)
 
 		tmpl.Execute(w, nil)
 	}
+
+
 
 	http.HandleFunc("/", h1)
 	http.HandleFunc("/divers/", h2)

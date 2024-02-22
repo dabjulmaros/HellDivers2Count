@@ -14,4 +14,18 @@ h1 span {
 kbd {
   background-color: #171d25;
   color: #f0f1f3;
+  width: 100%;
+}
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+small {
+  align-self: flex-end;
+  font-size: 0.7rem;
+  margin-right: 0.375rem;
+}
+img {
+  margin-top: 0.5rem;
 }

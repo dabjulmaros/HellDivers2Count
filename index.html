@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Helldiver2 Count</title>
+    <title>HELLDIVERS2 Count</title>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link
       rel="stylesheet"
@@ -15,7 +15,11 @@
   <body>
     <h1>
       <p><abbr title="Steam Only">Current</abbr> <span>HELLDIVERS</span></p>
-      <kbd hx-get="/divers/" hx-trigger="load, every 5m">Loading</kbd>
+      <div hx-get="/divers/" hx-trigger="load, every 5m">
+        <kbd>Loading</kbd>
+        <small><sub>Last Update: 02/22/2024 12:14PM</sub></small>
+        <!-- <img src="public/shock.png" /> -->
+      </div>
     </h1>
   </body>
 </html>
