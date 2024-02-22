@@ -92,7 +92,7 @@ func main() {
 		p := message.NewPrinter(language.English)
 
 		
-		rStr := p.Sprintf("<kbd>%d In-Game</kbd><small><sub>Last Update: %s</sub></small>", count, oldTime.Format("03:04:05PM"));
+		rStr := p.Sprintf("<kbd>%d In-Game</kbd><small><sub>Last Update: %s UTC</sub></small>", count, oldTime.UTC().Format("03:04:05PM"));
 
 		if count > 450000{
 			rStr += "<img src='public/shock.png'/></div>"; 
