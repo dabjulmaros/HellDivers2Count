@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"golang.org/x/text/language"
@@ -106,6 +107,12 @@ func main() {
 	http.HandleFunc("/divers/", h2)
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	// log.Println("Running port: 8000")
-	log.Fatal(http.ListenAndServe("0.0.0.0:8000", nil))
+	
+	port := os.Getenv("PORT")
+	if port == ""{
+		port = "8000"
+	}
+
+	log.Println("Running 0.0.0.0:"+port)
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
