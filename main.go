@@ -72,6 +72,7 @@ func main() {
 
 			count = steamResponse.Response.Player_count
 			oldCount = count
+			oldTime = time.Now()
 		}
 
 		return count
