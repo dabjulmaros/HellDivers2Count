@@ -7,7 +7,6 @@ body {
   text-align: center;
   background-color: #0c0c0c;
 }
-
 h1 span {
   color: #ffe80a;
 }
@@ -26,9 +25,16 @@ small {
   font-size: 0.7rem;
   margin-right: 0.375rem;
 }
+a {
+  color: #f0f1f3;
+  text-decoration-color: #ffe80a;
+}
 .nomargin {
   margin: 0;
 }
 .marginTop {
   margin-top: 0.5rem;
+}
+.grid {
+  grid-column-gap: 0.9rem;
 }
