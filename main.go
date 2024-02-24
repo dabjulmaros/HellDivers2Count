@@ -95,7 +95,7 @@ func main() {
 		rStr := p.Sprintf("<kbd>%d In-Game</kbd><small><sub>Last Update: %s UTC</sub></small>", count, oldTime.UTC().Format("13:04:05"))
 
 		if count > 700000 {
-			rStr += "<img src='public/shock.png'/></div>"
+			rStr += "<img src='public/shock.png' class='marginTop'/></div>"
 		}
 
 		tmpl, _ := template.New("t").Parse(rStr)

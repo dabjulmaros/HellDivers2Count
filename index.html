@@ -15,11 +15,53 @@
   <body>
     <h1>
       <p><abbr title="Steam Only">Current</abbr> <span>HELLDIVERS</span></p>
-      <div hx-get="/divers/" hx-trigger="load, every 300s">
+      <div class="flex" hx-get="/divers/" hx-trigger="load, every 300s">
         <kbd>Loading</kbd>
         <small><sub>Last Update: 02/22/2024 12:14PM</sub></small>
         <!-- <img src="public/shock.png" /> -->
       </div>
+
+      <small class="nomargin">
+        <div class="grid marginTop">
+          <div>
+            <a
+              href="https://twitter.com/helldivers2/"
+              class="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Twitter</a
+            >
+          </div>
+          <div>
+            <a
+              href="https://steamdb.info/app/553850/"
+              class="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              >SteamDB</a
+            >
+          </div>
+          <div>
+            <a
+              href="https://steamcommunity.com/app/553850/allnews/"
+              class="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Steam News</a
+            >
+          </div>
+          <div>
+            <a
+              href="https://discord.gg/helldivers"
+              class="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Discord</a
+            >
+          </div>
+        </div>
+      </small>
     </h1>
   </body>
 </html>
