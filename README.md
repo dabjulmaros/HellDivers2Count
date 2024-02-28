@@ -1,4 +1,4 @@
-# HEllDIVERS 2 Steam Count
+# HELLDIVERS 2 Steam Count
 
 [View the site](https://helldivers2count-production.up.railway.app/)
 
