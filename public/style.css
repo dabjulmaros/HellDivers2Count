@@ -41,6 +41,11 @@ a {
   color: #f0f1f3;
   text-decoration-color: #ffe80a;
 }
+canvas {
+  max-width: 450px;
+  width: 90vw;
+  margin: 0 auto;
+}
 .nomargin {
   margin: 0;
 }
@@ -50,4 +55,7 @@ a {
 .grid {
   grid-gap: 0.5rem;
   grid-template-columns: 1fr 1fr;
+}
+.canvasHolder {
+  width: 100vw;
 }

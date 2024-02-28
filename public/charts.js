@@ -1,5 +1,6 @@
 document.addEventListener("htmx:afterRequest", function (evt) {
-  if (evt.target == document.querySelector("canvas#playerChart")) {
+  const canvasEle = document.querySelector("canvas#playerChart");
+  if (evt.target == canvasEle) {
     data = JSON.parse(evt.detail.target.innerHTML);
     evt.target.innerHTML = "";
     if (chart == undefined) {
@@ -8,6 +9,7 @@ document.addEventListener("htmx:afterRequest", function (evt) {
     } else {
       updateChart(false);
     }
+    canvasEle.style.width = "90vw";
   }
 });
 
