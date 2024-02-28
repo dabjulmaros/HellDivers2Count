@@ -48,6 +48,6 @@ a {
   margin-top: 0.5rem;
 }
 .grid {
-  grid-column-gap: 0.9rem;
+  grid-gap: 0.5rem;
   grid-template-columns: 1fr 1fr;
 }

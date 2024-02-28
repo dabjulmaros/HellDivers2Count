@@ -154,7 +154,7 @@ func main() {
 				storePeak(oldCount)
 				oldTime = time.Now()
 			}
-			rData = DataCount{Count: oldCount, Updated: oldTime}
+			rData = DataCount{Count: oldCount, Updated: oldTime.UTC()}
 		}
 		return rData
 	}
@@ -179,7 +179,7 @@ func main() {
 		}
 
 		cStr := p.Sprintf("%d", count.Count)
-		uStr := p.Sprintf("%s", count.Updated.UTC().Format("15:04:05 MST"))
+		uStr := p.Sprintf("%s", count.Updated.Format("15:04:05 MST"))
 		pStr := p.Sprintf("%d", peakCount)
 		p48Str := p.Sprintf("%d", p48)
 
