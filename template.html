@@ -1,0 +1,11 @@
+<kbd
+  >{{.Count}} In-Game
+  <small>Last Update: {{.Updated}}</small>
+</kbd>
+<span class="grid">
+  <kbd>{{.Peak48}}<small>48H Peak</small></kbd>
+  <kbd>{{.Peak}}<small>Peak</small></kbd>
+</span>
+{{if .Shocked}}
+<img src="public/shock.png" />
+{{end}}

@@ -13,98 +13,193 @@ import (
 	"golang.org/x/text/message"
 )
 
-type Response struct {
-	Player_count int `json:"player_count"`
-	Result       int `json:"result"`
+type SteamResponse struct {
+	Response struct {
+		Player_count int `json:"player_count"`
+		Result       int `json:"result"`
+	}
 }
 
-type SteamResponse struct {
-	Response Response
+type DataCount struct {
+	Count   int
+	Updated time.Time
+}
+
+type DataStore struct {
+	Data []DataCount
+	Peak int
+}
+
+type TemplateResponse struct {
+	Count   string
+	Updated string
+	Peak48  string
+	Peak    string
+	Shocked bool
 }
 
 func main() {
-
-	oldTime := time.Now()
+	var counts []DataCount
+	peakCount := 0
 	oldCount := 0
+	oldTime := time.Now() 
+	oldTime = oldTime.AddDate(0,-1,0)
 
-	getPlayers := func() int {
-		count := oldCount
-		currentTime := time.Now()
-		if oldCount == 0 || currentTime.Sub(oldTime).Minutes() > 5 {
-			// res, err := http.Get("https://steamcommunity.com/app/553850")
-			// if err != nil {
-			// 	log.Fatal(err)
-			// }
-			// content, err := io.ReadAll(res.Body)
-			// res.Body.Close()
-			// if err != nil {
-			// 	log.Fatal(err)
-			// }
+	saveData := func() {
+		file, _ := json.Marshal(DataStore{Data: counts, Peak: peakCount})
 
-			// rgx, _ := regexp.Compile("<span class=\"apphub_NumInApp\">(?P<count>.+) In-Game<\\/span>")
+		err := os.WriteFile("StoredData.json", file, os.ModePerm)
 
-			// m := rgx.FindStringSubmatch(string(content))
-			// c := rgx.SubexpIndex("count")
-
-			// count,err = strconv.Atoi(m[c]);
-			// if err != nil{
-			// 	count = 0
-			// }
-
-			// Seems to be somewhat behind the steam community website
-			res, err := http.Get("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=553850")
-			if err != nil {
-				log.Fatal(err)
-			}
-			content, err := io.ReadAll(res.Body)
-			res.Body.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			steamResponse := SteamResponse{}
-
-			jsonErr := json.Unmarshal(content, &steamResponse)
-
-			if jsonErr != nil {
-				log.Fatal(jsonErr)
-			}
-
-			count = steamResponse.Response.Player_count
-			oldCount = count
-			oldTime = time.Now()
+		if err != nil {
+			log.Fatal(err)
 		}
-
-		return count
 	}
 
-	h1 := func(w http.ResponseWriter, r *http.Request) {
+	loadData := func() {
+		file, err := os.Open("StoredData.json")
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		defer file.Close()
+
+		fileByte, _ := io.ReadAll(file)
+
+		var StoredData DataStore
+		jsonErr := json.Unmarshal(fileByte, &StoredData)
+
+		if jsonErr != nil {
+			log.Fatal(jsonErr)
+		}
+
+		peakCount = StoredData.Peak
+		counts = StoredData.Data
+
+	}
+	loadData()
+
+	fetchData := func() int {
+		// Seems to be somewhat behind the steam community website
+		res, err := http.Get("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=553850")
+		if err != nil {
+			log.Fatal(err)
+		}
+		content, err := io.ReadAll(res.Body)
+		res.Body.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		steamResponse := SteamResponse{}
+
+		jsonErr := json.Unmarshal(content, &steamResponse)
+
+		if jsonErr != nil {
+			log.Fatal(jsonErr)
+		}
+
+		return steamResponse.Response.Player_count
+	}
+
+	storePeak := func(count int) {
+		if count > peakCount {
+			peakCount = count
+		}
+	}
+
+	var intervalData func()
+
+	intervalData = func() {
+
+		now := time.Now()
+
+		if len(counts) > 0 {
+			latestStoredCount := counts[len(counts)-1]
+
+			if now.Sub(latestStoredCount.Updated).Hours() < 1 {
+				return
+			}
+		}
+
+		count := fetchData()
+		storePeak(count)
+		counts = append(counts, DataCount{Count: count, Updated: now.UTC()})
+
+		if len(counts) > 48 {
+			counts = counts[:48]
+		}
+
+		saveData()
+
+		oldCount = count
+		oldTime = now
+
+		time.AfterFunc(1*time.Hour, intervalData)
+	}
+
+	intervalData()
+
+	getPlayers := func() DataCount {
+
+		now := time.Now()
+
+		latestStoredCount := counts[len(counts)-1]
+		rData := latestStoredCount
+
+		if now.Sub(latestStoredCount.Updated).Minutes() > 5 {
+			if now.Sub(oldTime).Minutes() > 5 {
+				oldCount = fetchData()
+				storePeak(oldCount)
+				oldTime = time.Now()
+			}
+			rData = DataCount{Count: oldCount, Updated: oldTime}
+		}
+		return rData
+	}
+
+	getIndex := func(w http.ResponseWriter, r *http.Request) {
 
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.Execute(w, nil)
 
 	}
 
-	h2 := func(w http.ResponseWriter, r *http.Request) {
-		// var count string = "init"
+	getDivers := func(w http.ResponseWriter, r *http.Request) {
+		p := message.NewPrinter(language.English)
 
 		count := getPlayers()
 
-		p := message.NewPrinter(language.English)
-
-		rStr := p.Sprintf("<kbd>%d In-Game</kbd><small><sub>Last Update: %s</sub></small>", count, oldTime.UTC().Format("15:04:05 MST"))
-
-		if count > 700000 {
-			rStr += "<img src='public/shock.png' class='marginTop'/></div>"
+		p48 := count.Count
+		for _, v := range counts {
+			if v.Count > p48 {
+				p48 = v.Count
+			}
 		}
 
-		tmpl, _ := template.New("t").Parse(rStr)
+		cStr := p.Sprintf("%d", count.Count)
+		uStr := p.Sprintf("%s", count.Updated.UTC().Format("15:04:05 MST"))
+		pStr := p.Sprintf("%d", peakCount)
+		p48Str := p.Sprintf("%d", p48)
 
-		tmpl.Execute(w, nil)
+		tmpl := template.Must(template.ParseFiles("template.html"))
+	
+		tmpl.Execute(w, TemplateResponse{Count: cStr, Updated: uStr, Peak: pStr, Peak48: p48Str, Shocked: count.Count > 700000})
 	}
 
-	http.HandleFunc("/", h1)
-	http.HandleFunc("/divers/", h2)
+	getData := func(w http.ResponseWriter, r *http.Request) {
+		b, err := json.Marshal(counts)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		io.WriteString(w, string(b))
+	}
+
+	http.HandleFunc("/", getIndex)
+	http.HandleFunc("/divers/", getDivers)
+	http.HandleFunc("/data/", getData)
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
 	port := os.Getenv("PORT")

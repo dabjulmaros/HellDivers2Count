@@ -2,6 +2,7 @@ body {
   width: 100vw;
   height: 100dvh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -14,6 +15,17 @@ kbd {
   background-color: #171d25;
   color: #f0f1f3;
   width: 100%;
+}
+kbd {
+  display: flex;
+  flex-direction: column;
+}
+span.grid {
+  display: grid;
+  margin-top: 0.5rem;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
 }
 div.flex {
   display: flex;
@@ -37,4 +49,5 @@ a {
 }
 .grid {
   grid-column-gap: 0.9rem;
+  grid-template-columns: 1fr 1fr;
 }

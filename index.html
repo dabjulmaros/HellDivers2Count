@@ -11,14 +11,22 @@
     />
     <link rel="stylesheet" href="public/style.css" />
     <link rel="icon" type="image/x-icon" href="/public/skull.png" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+      integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
   <body>
     <h1>
       <p><abbr title="Steam Only">Current</abbr> <span>HELLDIVERS</span></p>
       <div class="flex" hx-get="/divers/" hx-trigger="load, every 300s">
-        <kbd>Loading</kbd>
-        <small><sub>Last Update: 02/22/2024 12:14PM</sub></small>
-        <!-- <img src="public/shock.png" /> -->
+        <kbd>Loading<small>Last Update: 99:99:99 UTC</small></kbd>
+        <span class="grid">
+          <kbd>Loading<small>48H Peak</small></kbd>
+          <kbd>Loading<small>Peak</small></kbd>
+        </span>
       </div>
       <small class="nomargin">
         <div class="grid marginTop">
@@ -70,5 +78,15 @@
         </div>
       </small>
     </h1>
+    <div>
+      <canvas
+        id="playerChart"
+        width="450"
+        height="300"
+        hx-get="/data/"
+        hx-trigger="load, every 3600s"
+      ></canvas>
+    </div>
+    <script src="public/charts.js"></script>
   </body>
 </html>
