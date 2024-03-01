@@ -179,7 +179,8 @@ func main() {
 		}
 
 		cStr := p.Sprintf("%d", count.Count)
-		uStr := p.Sprintf("%s", count.Updated.Format("15:04:05 MST"))
+		// uStr := p.Sprintf("%s", count.Updated.Format("15:04:05 MST"))
+		uStr := p.Sprintf("%s", count.Updated)
 		pStr := p.Sprintf("%d", peakCount)
 		p48Str := p.Sprintf("%d", p48)
 

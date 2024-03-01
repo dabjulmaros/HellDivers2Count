@@ -1,5 +1,6 @@
 document.addEventListener("htmx:afterRequest", function (evt) {
   const canvasEle = document.querySelector("canvas#playerChart");
+  const playerCounts = document.querySelector("div.flex");
   if (evt.target == canvasEle) {
     data = JSON.parse(evt.detail.target.innerHTML);
     evt.target.innerHTML = "";
@@ -10,6 +11,13 @@ document.addEventListener("htmx:afterRequest", function (evt) {
       updateChart(false);
     }
     canvasEle.style.width = "90vw";
+  } else if (evt.target == playerCounts) {
+    const updatedEle = document.querySelector("#updated");
+    const updatedDate = new Date(updatedEle.innerText);
+    updatedEle.innerText = new Intl.DateTimeFormat("default", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(updatedDate);
   }
 });
 

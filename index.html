@@ -22,7 +22,11 @@
     <h1>
       <p><abbr title="Steam Only">Current</abbr> <span>HELLDIVERS</span></p>
       <div class="flex" hx-get="/divers/" hx-trigger="load, every 300s">
-        <kbd>Loading<small>Last Update: 99:99:99 UTC</small></kbd>
+        <kbd
+          >Loading<small
+            >Last Update: <span id="updated">99:99:99</span></small
+          ></kbd
+        >
         <span class="grid">
           <kbd>Loading<small>48H Peak</small></kbd>
           <kbd>Loading<small>Peak</small></kbd>
