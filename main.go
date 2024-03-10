@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"time"
@@ -118,7 +119,7 @@ func main() {
 		if len(counts) > 0 {
 			latestStoredCount := counts[len(counts)-1]
 
-			if now.Sub(latestStoredCount.Updated).Hours() == 0 {
+			if math.Floor(now.Sub(latestStoredCount.Updated).Hours()) == 0 {
 				return
 			}
 		}
