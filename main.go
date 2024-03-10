@@ -42,8 +42,8 @@ func main() {
 	var counts []DataCount
 	peakCount := 0
 	oldCount := 0
-	oldTime := time.Now() 
-	oldTime = oldTime.AddDate(0,-1,0)
+	oldTime := time.Now()
+	oldTime = oldTime.AddDate(0, -1, 0)
 
 	saveData := func() {
 		file, _ := json.Marshal(DataStore{Data: counts, Peak: peakCount})
@@ -136,6 +136,10 @@ func main() {
 		oldCount = count
 		oldTime = now
 
+		p := message.NewPrinter(language.English)
+
+		log.Println(p.Sprintf("Count: %d, Time: %s, Count Length: %d", count, now.Format("15:04:05 MST"), len(counts)))
+
 		time.AfterFunc(1*time.Hour, intervalData)
 	}
 
@@ -185,7 +189,7 @@ func main() {
 		p48Str := p.Sprintf("%d", p48)
 
 		tmpl := template.Must(template.ParseFiles("template.html"))
-	
+
 		tmpl.Execute(w, TemplateResponse{Count: cStr, Updated: uStr, Peak: pStr, Peak48: p48Str, Shocked: count.Count > 700000})
 	}
 
