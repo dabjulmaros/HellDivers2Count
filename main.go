@@ -114,11 +114,14 @@ func main() {
 
 	intervalData = func() {
 
+		time.AfterFunc(1*time.Hour, intervalData)
+
 		now := time.Now()
 
 		if len(counts) > 0 {
 			latestStoredCount := counts[len(counts)-1]
 
+			log.Println(math.Round(now.Sub(latestStoredCount.Updated).Hours()))
 			if math.Round(now.Sub(latestStoredCount.Updated).Hours()) == 0 {
 				return
 			}
@@ -140,8 +143,6 @@ func main() {
 		p := message.NewPrinter(language.English)
 
 		log.Println(p.Sprintf("Count: %d, Time: %s, Count Length: %d", count, now.Format("15:04:05 MST"), len(counts)))
-
-		time.AfterFunc(1*time.Hour, intervalData)
 	}
 
 	intervalData()
