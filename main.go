@@ -118,7 +118,7 @@ func main() {
 		if len(counts) > 0 {
 			latestStoredCount := counts[len(counts)-1]
 
-			if now.Sub(latestStoredCount.Updated).Hours() < 1 {
+			if now.Sub(latestStoredCount.Updated).Hours() == 0 {
 				return
 			}
 		}
