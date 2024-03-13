@@ -117,11 +117,13 @@ func main() {
 		time.AfterFunc(1*time.Hour, intervalData)
 
 		now := time.Now()
+		var hoursSinceLastUpdate float64
 
 		if len(counts) > 0 {
 			latestStoredCount := counts[len(counts)-1]
 
-			log.Println(math.Round(now.Sub(latestStoredCount.Updated).Hours()))
+			hoursSinceLastUpdate = math.Round(now.Sub(latestStoredCount.Updated).Hours())
+
 			if math.Round(now.Sub(latestStoredCount.Updated).Hours()) == 0 {
 				return
 			}
@@ -132,7 +134,7 @@ func main() {
 		counts = append(counts, DataCount{Count: count, Updated: now.UTC()})
 
 		if len(counts) > 48 {
-			counts = counts[:48]
+			counts = counts[len(counts)-48:]
 		}
 
 		saveData()
@@ -140,9 +142,10 @@ func main() {
 		oldCount = count
 		oldTime = now
 
+		//logs in case any data is missed
 		p := message.NewPrinter(language.English)
+		log.Println(p.Sprintf("\n%d\nCount: %d, Time: %s, Count Length: %d", hoursSinceLastUpdate, count, now.Format("15:04:05 MST"), len(counts)))
 
-		log.Println(p.Sprintf("Count: %d, Time: %s, Count Length: %d", count, now.Format("15:04:05 MST"), len(counts)))
 	}
 
 	intervalData()
