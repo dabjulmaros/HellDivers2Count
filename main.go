@@ -14,9 +14,19 @@ import (
 	"golang.org/x/text/message"
 )
 
+type hdApiResponse struct {
+	PlanetStatus []struct {
+		Players int `json:"players"`
+	} `json:"planetStatus"`
+	GlobalEvents []struct {
+		Title   string `json:"title"`
+		Message string `json:"message"`
+	} `json:"globalEvents"`
+}
+
 type SteamResponse struct {
 	Response struct {
-		Player_count int `json:"player_count"`
+		Player_Count int `json:"player_count"`
 		Result       int `json:"result"`
 	}
 }
@@ -83,7 +93,12 @@ func main() {
 
 	fetchData := func() int {
 		// Seems to be somewhat behind the steam community website
-		res, err := http.Get("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=553850")
+		// res, err := http.Get("https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=553850")
+
+		// Calls Helldivers 2 servers api
+		// Probably not intended
+		res, err := http.Get("https://api.live.prod.thehelldiversgame.com/api/WarSeason/801/Status")
+
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -93,15 +108,23 @@ func main() {
 			log.Fatal(err)
 		}
 
-		steamResponse := SteamResponse{}
+		// steamResponse := SteamResponse{}
+		// jsonErr := json.Unmarshal(content, &steamResponse)
 
-		jsonErr := json.Unmarshal(content, &steamResponse)
+		hdResponse := hdApiResponse{}
+		jsonErr := json.Unmarshal(content, &hdResponse)
 
 		if jsonErr != nil {
 			log.Fatal(jsonErr)
 		}
 
-		return steamResponse.Response.Player_count
+		// return steamResponse.Response.Player_Count
+		Player_Count := 0
+
+		for _, v := range hdResponse.PlanetStatus {
+			Player_Count += v.Players
+		}
+		return Player_Count
 	}
 
 	storePeak := func(count int) {
@@ -117,12 +140,12 @@ func main() {
 		time.AfterFunc(1*time.Hour, intervalData)
 
 		now := time.Now()
-		var hoursSinceLastUpdate float64
+		var hoursSinceLastUpdate int
 
 		if len(counts) > 0 {
 			latestStoredCount := counts[len(counts)-1]
 
-			hoursSinceLastUpdate = math.Round(now.Sub(latestStoredCount.Updated).Hours())
+			hoursSinceLastUpdate = int(math.Round(now.Sub(latestStoredCount.Updated).Hours()))
 
 			if math.Round(now.Sub(latestStoredCount.Updated).Hours()) == 0 {
 				return
