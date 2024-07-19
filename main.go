@@ -116,6 +116,7 @@ func main() {
 
 		if jsonErr != nil {
 			log.Fatal(jsonErr)
+			return counts[len(counts)-1].Count
 		}
 
 		// return steamResponse.Response.Player_Count
