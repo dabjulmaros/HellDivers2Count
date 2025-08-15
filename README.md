@@ -1,6 +1,5 @@
 # HELLDIVERS 2 Steam Count
 
-[View the site](https://helldivers2count-production.up.railway.app/)
 
 This is a crude approximation of what SteamDB offers focused on the HELLDIVERS 2 Game.
 
